@@ -51,6 +51,12 @@ struct Cli {
         parse(from_str))
     ]
     planet_type: Option<PlanetType>,
+
+    #[structopt(long = "diameter", short = "d", help = "Average diameter of the celestial body, ignored if generating a star with an already defined class", parse(try_from_str))]
+    diameter: Option<f64>,
+
+    #[structopt(long = "temperature", help = "Average surface temperature of the star in Kelvin, ignored if generating a star with an already defined class", parse(try_from_str))]
+    temp: Option<f64>
 }
 
 fn main() {
@@ -63,18 +69,34 @@ fn main() {
     
     let body_type = args.body_type;
 
+    let diameter = args.diameter;
+    let temp = args.temp;
+
     match body_type {
         BodyType::STAR => {
             let star_class = args.star_class;
             match star_class {
                 Some(v) => { println!("{}", Star::generate_from_class(&name, v)); },
-                _ => { println!("{}", Star::generate(&name)); }
+                _ => {
+                    match diameter {
+                        Some(v) => { println!("{}", Star::generate_from_diameter(&name, v)); },
+                        _ => { match temp {
+                            Some(v) => { println!("{}", Star::generate_from_temp(&name, v)); },
+                            _ => { println!("{}", Star::generate(&name)); }
+                        } } 
+                    }
+                }
             }
         },
         BodyType::PLANET => {
             let planet_type = args.planet_type;
             match planet_type {
-                Some(v) => { println!("{}", Planet::generate_from_type(&name, v)) },
+                Some(v) => {
+                    match diameter {
+                        Some(d) => { println!("{}", Planet::generate_from_type_and_diameter(&name, v, d)); },
+                        _ => { println!("{}", Planet::generate(&name)); }
+                    }
+                },
                 _ => { println!("{}", Planet::generate(&name)); }
             }
         },

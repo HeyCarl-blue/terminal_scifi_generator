@@ -191,7 +191,6 @@ pub mod generator {
 
             for y in -FRAME..=FRAME {
                 for x in -FRAME..=FRAME {
-                    // println!("{} - {}", x, y);
                     if x*x + y*y - ri * ri < 0 {
                         chars.push(format!("{}█\x1b[0m", self.class.color()));
                     } else {
@@ -302,7 +301,7 @@ pub mod generator {
                 PlanetType::ICEGIANT => rng.gen_range(45_000.0..60_000.0),
             };
             let mass = match planet_type {
-                PlanetType::TERRESTRIAL => rng.gen_range(2_E+22..2.9E+25),
+                PlanetType::TERRESTRIAL => rng.gen_range(2_E+22..2.9_E+25),
                 PlanetType::GASGIANT => rng.gen_range(5_E+26..3_E+28),
                 PlanetType::ICEGIANT => rng.gen_range(8_E+26..3.6_E+28),
             };
@@ -311,6 +310,14 @@ pub mod generator {
                 PlanetType::GASGIANT => rng.gen_range(3_000.0..80_000.0),
                 PlanetType::ICEGIANT => rng.gen_range(3_000.0..80_000.0),
             };
+
+            Planet::new(name, planet_type, diameter, mass, orbital_period)
+        }
+
+        pub fn generate_from_type_and_diameter(name: &'a str, planet_type: PlanetType, diameter: f64) -> Planet<'a> {
+            let mut rng = thread_rng();
+            let mass = rng.gen_range(2_E+22..2.9_E+25);
+            let orbital_period = rng.gen_range(70.0..750.0);
 
             Planet::new(name, planet_type, diameter, mass, orbital_period)
         }

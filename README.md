@@ -14,7 +14,8 @@ OPTIONS:
 
 ## Example
 
-`scifi_generator --body star --class K` produces the following:
+`scifi_generator --body star --class K`
+produces the following:
 
 ![example](example_img.png)
 

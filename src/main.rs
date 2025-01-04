@@ -94,7 +94,7 @@ fn main() {
                 Some(v) => {
                     match diameter {
                         Some(d) => { println!("{}", Planet::generate_from_type_and_diameter(&name, v, d)); },
-                        _ => { println!("{}", Planet::generate(&name)); }
+                        _ => { println!("{}", Planet::generate_from_type(&name, v)); }
                     }
                 },
                 _ => { println!("{}", Planet::generate(&name)); }
